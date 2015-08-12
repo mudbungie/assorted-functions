@@ -1,4 +1,4 @@
-#!/usr/bin/python3.4
+#!/usr/bin/python3
 
 # this is a quick script to rename stupidly named torrents and their contents to something intelligible
 # usage:
