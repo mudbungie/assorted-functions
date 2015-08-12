@@ -37,7 +37,7 @@ class mediaLibrary:
         if isDir:
             # to preserve filetypes. Makes more sense when you see it used 
             # on actual files. 
-            fileNameRoot = fullName
+            fileNameRoot = fileName
             fileNameExt = ''
             for child in os.listdir(fullName):
                 # recurse, extending the path with the directory that we're
