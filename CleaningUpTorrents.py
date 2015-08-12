@@ -12,17 +12,12 @@ badName = sys.argv[1]
 # to rename to
 goodName = sys.argv[2]
 
-def chaffCleanup(fileName):
-    print('File: ' + fileName + ' does not match known patterns. Delete? [y/N]')
-    if input() == 'y':
-        os.remove(fileName)
-
 class mediaLibrary:
     def __init__(self, badName, goodName):
         # clean up the trailing / from tab completion
         self.badName = badName.rstrip(os.sep)
         self.goodName = goodName.rstrip(os.sep)
-        self.cwd = os.getcwd()
+        self.cwd = os.getcwd() + os.sep
         print(self.badName)
         print(self.goodName)
         print(self.cwd)
@@ -33,33 +28,37 @@ class mediaLibrary:
         if inheritedPath == None:
             inheritedPath = self.cwd
         
-        # crawl through the directory and recurse this function on every file
-        # because the recursion happens here, all of the modification of files
-        # occurs from the bottom of the file structure up, not vise-versa
-        try:
-            for child in os.listdir(inheritedPath + os.sep + fileName):
-                self.renameEverything(child, inheritedPath + os.sep + fileName)
-        except NotADirectoryError:
-            pass
-        # make sure not to strip off the filename extension
-        # splitext returns an empty string for directories, 
-        # so no worries there. If it matches the bad name, 
-        # rename it to the good one
-        fileNameSections = os.path.splitext(fileName)
-        for section in fileNameSections:
-            print(section)
-        print('goodName: ' + self.goodName)
-        print('badName: ' + self.badName)
-        if fileNameSections[0] == self.badName:
-            destinationName = self.goodName + fileNameSections[1]
-            os.rename(inheritedPath + os.sep + fileName, inheritedPath + os.sep + destinationName)
-        elif fileNameSections[0] != self.goodName:
-            chaffCleanup(inheritedPath + os.sep + fileName)
-
-# by which I don't mean clean, but make sane 
-def sanitizeLibrary(badName, goodName):
-    badLibrary = mediaLibrary(badName, goodName)
-    badLibrary.renameEverything()
+        # crawl through any subdirectories and recurse this function on 
+        # every file. Because the recursion happens here, the process goes
+        # from bottom to top
+        if os.path.isdir(inheritedPath + fileName):
+            # to preserve filetypes. Makes more sense when you see it used 
+            # on actual files. 
+            fileNameRoot = fileName
+            fileNameExt = ''
+            for child in os.listdir(inheritedPath + fileName):
+                # recurse, extending the path with the directory that we're
+                # presently working on
+                self.renameEverything(child, inheritedPath + fileName + os.sep)
+        else:
+            # preserving filetypes
+            fileNameSections = os.path.splitext(fileName)
+            fileNameRoot = fileNameSections[0]
+            fileNameExt = fileNameSections[1]
+        # to prevent unbound errors
+        whatToDo = False
+        if fileNameRoot != self.goodName and fileNameRoot != self.badName:
+            whatToDo = input('File: ' + fileName + ' does not match known patterns.' +
+                                'Delete? [y/N/r(ename)]')
+            if whatToDo == 'y':
+                os.remove(inheritedPath + fileName)
+            # if it's exactly the match, or if the user decided to go ahead and 
+            # rename anyways
+        if fileNameRoot == self.badName or whatToDo == 'r':
+            destinationName = self.goodName + fileNameExt
+            os.rename(inheritedPath + fileName, inheritedPath + destinationName)
+            print('Renamed ' + fileName + ' to ' + destinationName)
 
 if __name__ == "__main__":
-    sanitizeLibrary(badName, goodName)
+    badLibrary = mediaLibrary(badName, goodName)
+    badLibrary.renameEverything()
