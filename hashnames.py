@@ -65,5 +65,6 @@ def renameFiles(path, words):
         os.rename(filename, path + makeUpName(filename, words) + ext)
 
 if __name__ == '__main__':
-    renameFiles(argv[1], getWords())
+    for arg in argv[1:]:
+        renameFiles(arg, getWords())
     
