@@ -1,7 +1,9 @@
 #!/usr/local/bin/python3.4
 
+fromAddress = 'user@domain.top'
+smtpServer = 'smtp.domain.top'
 
-def sendEmail(authUser, authPass, recipient, subject, body, fromAddress='contentalert@sldesksite.com'):
+def sendEmail(authUser, authPass, recipient, subject, body, fromAddress=fromAddress):
 	import smtplib
 	from email.mime.multipart import MIMEMultipart
 	from email.mime.text import MIMEText
