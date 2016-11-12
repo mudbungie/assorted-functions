@@ -57,6 +57,7 @@ def get_lan_if(toaddr):
 	route = subprocess.Popen(command, stdout=subprocess.PIPE)
 	route.wait() # Make sure that it completes the command
 	route = route.stdout.read().decode().split()
+	print(route)
 	lan_dev = route[2]
 	lan_addr = route[4]
 	return lan_dev, lan_addr
