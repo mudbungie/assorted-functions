@@ -2,6 +2,7 @@
 
 # Initialize host for ansible.
 
+mkdir -p $HOME/.ssh
 curl -s https://www.mudbungie.net/ansible.pub >> $HOME/.ssh/authorized_keys
 if (($? == 0)); then
 	echo "Key installed"
