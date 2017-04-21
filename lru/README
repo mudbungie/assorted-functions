@@ -1,0 +1,16 @@
+This is the readme for a the lru.py demo program, provided upon request for 
+BrandVerity.
+
+This program was written and tested in Python2.7.9, and requires no 
+non-standard libraries. 
+To use it, either cat a test input file into the program's stdin, or 
+type your input directly, followed by CTRL+D. 
+
+Each command should be on its own line. The following commands are supported:
+SIZE takes one argument, and defines the size of the cache. All commands
+	prior to SIZE will fail, as the cache has not yet been instantiated.
+PUT takes two arguments, key and value, inserts the key/value pair into
+	the cache.
+GET takes one argument, retrieves the value associated with a key.
+EXIT terminates the program.
+
